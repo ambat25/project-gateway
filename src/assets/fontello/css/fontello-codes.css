@@ -1,0 +1,8 @@
+
+.icon-sidebar:before { content: '\e800'; } /* '' */
+.icon-brand:before { content: '\e801'; } /* '' */
+.icon-pie-chart:before { content: '\e802'; } /* '' */
+.icon-dashboard:before { content: '\e803'; } /* '' */
+.icon-chart:before { content: '\e804'; } /* '' */
+.icon-power:before { content: '\e805'; } /* '' */
+.icon-slate:before { content: '\e806'; } /* '' */
