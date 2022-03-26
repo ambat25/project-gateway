@@ -3,7 +3,6 @@ import { Header } from './components/styled/header';
 import { Layout } from './components/styled/layout';
 import { Panel, PanelContainer, PanelFilters, PanelGrid, PanelHeader } from './components/styled/panel';
 import { Card } from './components/styled/card';
-import { ProjectCard } from './components/ProjectCard';
 import Sidebar from './components/Sidebar';
 import { Box } from './components/styled/box';
 import { Footer } from './components/styled/footer';
@@ -12,8 +11,8 @@ import { DateInput } from './components/styled/date';
 import { Button } from './components/styled/button';
 import Chart, { ChartLabel } from './components/Chart';
 import Empty from './components/Empty';
-
-import "./assets/fontello/css/fontello.css";
+import Reports from './components/Reports';
+import { numberWithCommas } from './utils';
 
 
 function App() {
@@ -30,7 +29,6 @@ function App() {
     project: '',
     gateway: '',
   });
-  const [openedProject, setOpenedProject] = useState(null);
   const [user] = useState({
     name: 'John Doe',
     image: 'https://ui-avatars.com/api/?name=John+Doe&background=F6CA65&color=FFF'
@@ -92,7 +90,7 @@ function App() {
       [cur?.[key]]: (acc?.[cur?.[key]] || 0) + cur.amount
     }), {});
 
-    return Object.keys(calculatedReport)
+    return Object.keys(calculatedReport).sort((a, b) => indexer[a]?.name > indexer[b]?.name ? 1 : -1)
       .map(c => ({ id: c, name: indexer[c]?.name, value: +Number.parseFloat(calculatedReport[c]).toFixed(2) }))
   }
 
@@ -110,8 +108,8 @@ function App() {
     fetch('/report', {
       method: 'POST',
       body: JSON.stringify({
-        "from": filter.startDate ? new Date(filter?.startDate)?.split('T')[0] : '',
-        "to": filter.endDate ? new Date(filter?.endDate)?.split('T')[0] : '',
+        "from": filter.startDate ? new Date(filter?.startDate).toISOString().split('T')[0] : '',
+        "to": filter.endDate ? new Date(filter?.endDate).toISOString().split('T')[0] : '',
         "projectId": filter.project,
         "gatewayId": filter.gateway,
       }),
@@ -128,6 +126,20 @@ function App() {
     fetchFrom('/projects', setProjects);
     fetchFrom('/gateways', setGateways);
   }, []);
+
+  const getTotal = () => {
+    let currentReports = []
+
+    if (selection.gateway && !selection.project) {
+      currentReports = reportsBy('gatewayId')?.[selection.gateway]
+    } else if (selection.project && !selection.gateway){
+      currentReports = reportsBy('projectId')?.[selection.project] 
+    } else {
+      currentReports = Object.values(reports).flat();
+    }
+    const total = Number.parseFloat(currentReports?.reduce((acc, cur) => acc + (+cur.amount), 0) || 0).toFixed(2);
+    return numberWithCommas(total);
+  }
 
   return (
     <>
@@ -190,40 +202,66 @@ function App() {
                         <label>{getSelection()}</label>
                       </Box>
                       <Box pad="17px" />
-                      <div style={{ overflowY: 'scroll', maxHeight: '500px' }}>
-                        {
-                          projects?.map(prj => (
-                            <ProjectCard
-                              key={prj.projectId}
-                              amount={prj.amount}
-                              isOpened={openedProject === prj.projectId}
-                              onToggle={() => setOpenedProject(openedProject === prj.projectId ? null : prj.projectId)}
-                              title={prj.name}
-                              gateways={indexedGateways}
-                              data={reportsBy('projectId')?.[prj.projectId]}
-                            />
-                          ))
-                        }
-                      </div>
-                    </Card>
+                      {
+                        selection.project && !selection.gateway ? (
+                          <Reports
+                            data={gateways}
+                            keyId='gatewayId'
+                            subKey="projectId"
+                            keyTitle="Project"
+                            indexer={indexedProjects}
+                            reports={reportsBy('gatewayId')}
+                          />
+                        ): (
+                          <Reports
+                            data={projects}
+                            keyId='projectId'
+                            subKey="gatewayId"
+                            keyTitle="Gateway"
+                            indexer={indexedGateways}
+                            reports={reportsBy('projectId')}
+                          />
+                        )
+                      }
 
-                    <Box pad="13.5px 0px" />
-
-                    <Card color='#F1FAFE' pad="17px 19px 12px">
-                      <label>TOTAL: 14,065 USD</label>
                     </Card>
+                    {
+                     ( (selection.project && selection.gateway) || (!selection.gateway  && !selection.project) )&& (
+                        <>
+                          <Box pad="13.5px 0px" />
+
+                          <Card color='#F1FAFE' pad="17px 19px 12px">
+                            <label>TOTAL: {getTotal()} USD</label>
+                          </Card>
+                        </>
+                      )
+                    }
                   </Box>
                   {
                     (selection.gateway || selection.project) && !(selection.gateway && selection.project) && (
-                      <Box pad="0 0 0 30px">
-                        <Card color='#F1FAFE' pad="17px 19px 12px">
-                          <ChartLabel labels={getChartBy('projectId', indexedProjects)} />
-                        </Card>
-                        <Chart data={getChartBy('projectId', indexedProjects)} />
-                        <Card color='#F1FAFE' pad="17px 19px 12px">
-                          <label>TOTAL: 14,065 USD</label>
-                        </Card>
-                      </Box>
+                      selection.project ? (
+                        <Box pad="0 0 0 30px">
+                          <Card color='#F1FAFE' pad="17px 19px 12px">
+                            <ChartLabel labels={getChartBy('gatewayId', indexedGateways)} />
+                          </Card>
+                          <Chart data={getChartBy('gatewayId', indexedGateways)} />
+                          <Card color='#F1FAFE' pad="17px 19px 12px">
+                            <label>TOTAL: {getTotal()} USD</label>
+                          </Card>
+                        </Box>
+
+                      ) : (
+                        <Box pad="0 0 0 30px">
+                          <Card color='#F1FAFE' pad="17px 19px 12px">
+                            <ChartLabel labels={getChartBy('projectId', indexedProjects)} />
+                          </Card>
+                          <Chart data={getChartBy('projectId', indexedProjects)} />
+                          <Card color='#F1FAFE' pad="17px 19px 12px">
+                            <label>TOTAL: {getTotal()} USD</label>
+                          </Card>
+                        </Box>
+                      )
+
                     )
                   }
                 </PanelGrid>

@@ -3,26 +3,24 @@ import { PieChart, Pie, Cell } from "recharts";
 import styled from "styled-components";
 
 export const ChartLabelWrapper = styled.div`
-    // background: ${props => props.color || '#FFF'};
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: ${props => props.borderRadius || '10px'};;
-    padding: ${props => props.pad || '0'};
-    cursor: ${props => props.cursor || 'default'};
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: ${(props) => props.borderRadius || "10px"};
+  padding: ${(props) => props.pad || "0"};
+  cursor: ${(props) => props.cursor || "default"};
 
-    & .label {
-      padding: 0 0 0 12px;
-    }
+  & .label {
+    padding: 0 0 0 12px;
+  }
 `;
 
 export const ChartLabelTag = styled.span`
-    width: 15px;
-    height: 15px;
-    background: ${props => props.color || '#FFF'};
-    border-radius: 5px;
-    display: inline-block;
-    
+  width: 15px;
+  height: 15px;
+  background: ${(props) => props.color || "#FFF"};
+  border-radius: 5px;
+  display: inline-block;
 `;
 
 const COLORS = ["#6497B1", "#FFC107", "#F24E1E", "#A259FF"];
@@ -30,18 +28,15 @@ const COLORS = ["#6497B1", "#FFC107", "#F24E1E", "#A259FF"];
 export const ChartLabel = ({ labels }) => {
   return (
     <ChartLabelWrapper>
-      {
-        labels.map((l, index) => (
+      {labels.map((l, index) => (
         <span key={l.id}>
           <ChartLabelTag color={COLORS[index % COLORS.length]} />
-          <span className="label">
-            {l.name}
-          </span>
-        </span>))
-      }
+          <span className="label">{l.name}</span>
+        </span>
+      ))}
     </ChartLabelWrapper>
-  )
-}
+  );
+};
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -54,7 +49,7 @@ const renderCustomizedLabel = ({
 }) => {
   const radius = innerRadius - 8 + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + (radius) * Math.sin(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
   return (
     <text

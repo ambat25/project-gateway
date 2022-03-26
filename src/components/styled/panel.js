@@ -5,7 +5,6 @@ export const Panel = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
 `;
 
 export const PanelContainer = styled.div`
