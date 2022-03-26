@@ -5,12 +5,18 @@ export const Panel = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: scroll;
 `;
 
 export const PanelContainer = styled.div`
     padding: 30px;
     position: relative;
     flex-grow: 1;
+`;
+
+export const PanelGrid = styled.div`
+    display: grid;
+    grid-template-columns: auto max-content;
 `;
 
 export const PanelHeader = styled.div`

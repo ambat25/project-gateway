@@ -13,8 +13,8 @@ export const TD = styled.td`
 
 `;
 
-export const TH = styled.td`
-  border: none;
+export const TH = styled.th`
+  border: none !important;
   font-size: 16px;
   line-height: 164.4%;
   font-weight: 400;
@@ -22,7 +22,6 @@ export const TH = styled.td`
   text-align: ${props => props.textAlign || 'left'};
   height: 35px;
   padding: 5px 25px 5px 6px;
-  
   background: #FFFFFF;
 `;
 
@@ -33,6 +32,7 @@ export const Table = styled.table`
   width: 100%;
   color: #011F4B;
   padding: 14px 0 0 15px;
+  border-collapse:collapse;
 
   & thead, tbody{
     width: 100%
