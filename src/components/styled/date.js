@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import DateIcon from '../../assets/img/date-icon.png';
 
 import "react-datepicker/dist/react-datepicker.css";
+import { formatDate } from "../../utils";
 
 
 export const DateWrapper = styled.div`
@@ -24,7 +25,7 @@ export const DateInput = (props) => {
   return (
     <Box pad="0 0 0 12px">
       <DatePicker
-        customInput={<DateWrapper>{props.selected?.toLocaleDateString() || props.placeholder}</DateWrapper>}
+        customInput={<DateWrapper>{props.selected ? formatDate(props.selected) : props.placeholder}</DateWrapper>}
         {...props}
       />
 

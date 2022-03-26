@@ -13,6 +13,11 @@ export const PanelContainer = styled.div`
     flex-grow: 1;
 `;
 
+export const PanelGrid = styled.div`
+    display: grid;
+    grid-template-columns: auto max-content;
+`;
+
 export const PanelHeader = styled.div`
     display: flex;
     justify-content: space-between;

@@ -4,6 +4,7 @@ export const SideNav = styled.div`
     width: ${props => props.collapseWidth}px;
     transition: all 0.3s ease-in-out;
     overflow: hidden ;
+    max-height: 100vh;
 `;
 
 export const MenuElement = styled.div`
