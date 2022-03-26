@@ -14,6 +14,7 @@ import Empty from './components/Empty';
 import Reports from './components/Reports';
 import { numberWithCommas } from './utils';
 
+const BASE_API_URL = 'http://178.63.13.157:8090/mock-api/api';
 
 function App() {
   const [collapse, setCollapse] = useState(true);
@@ -102,10 +103,10 @@ function App() {
   }
 
   const fetchFrom = (route, cb) =>
-    fetch(route).then(res => res.json()).then(res => cb(res.data))
+    fetch(`${BASE_API_URL}${route}`).then(res => res.json()).then(res => cb(res.data))
 
   const fetchReport = () => {
-    fetch('/report', {
+    fetch(`${BASE_API_URL}/report`, {
       method: 'POST',
       body: JSON.stringify({
         "from": filter.startDate ? new Date(filter?.startDate).toISOString().split('T')[0] : '',
