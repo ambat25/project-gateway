@@ -247,7 +247,7 @@ function App() {
                           </Card>
                           <Chart data={getChartBy('gatewayId', indexedGateways)} />
                           <Card color='#F1FAFE' pad="17px 19px 12px">
-                            <label>TOTAL: {getTotal()} USD</label>
+                            <label>PROJECT TOTAL: {getTotal()} USD</label>
                           </Card>
                         </Box>
 
@@ -258,7 +258,7 @@ function App() {
                           </Card>
                           <Chart data={getChartBy('projectId', indexedProjects)} />
                           <Card color='#F1FAFE' pad="17px 19px 12px">
-                            <label>TOTAL: {getTotal()} USD</label>
+                            <label>GATEWAY TOTAL: {getTotal()} USD</label>
                           </Card>
                         </Box>
                       )
