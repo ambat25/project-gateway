@@ -8,6 +8,8 @@ export const Layout = styled.div`
     background: #FFFFFF;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
+    overflow: hidden;
+    height: 100vh;
 
     & *{
         box-sizing: border-box;

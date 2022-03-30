@@ -4,7 +4,7 @@ import { Layout } from './components/styled/layout';
 import { Panel, PanelContainer, PanelFilters, PanelGrid, PanelHeader } from './components/styled/panel';
 import { Card } from './components/styled/card';
 import Sidebar from './components/Sidebar';
-import { Box } from './components/styled/box';
+import { Box, TableReportBox } from './components/styled/box';
 import { Footer } from './components/styled/footer';
 import { Select } from './components/styled/select';
 import { DateInput } from './components/styled/date';
@@ -197,7 +197,7 @@ function App() {
             {
               reports?.length <= 0 ? <Empty /> : (
                 <PanelGrid>
-                  <Box>
+                  <TableReportBox>
                     <Card color='#F1FAFE' pad="17px 19px 12px">
                       <Box>
                         <label>{getSelection()}</label>
@@ -237,7 +237,7 @@ function App() {
                         </>
                       )
                     }
-                  </Box>
+                  </TableReportBox>
                   {
                     (selection.gateway || selection.project) && !(selection.gateway && selection.project) && (
                       selection.project ? (
